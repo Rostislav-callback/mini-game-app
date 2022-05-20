@@ -2,8 +2,9 @@
     <div class="game-menu-block">
         <button id="start" class="start-game-button" (click)="startGame()">Start</button>
         <div class="game-time-block">
-            timer:
-            <span *ngIf="timer$ | async as time">{{time - 1}}</span>       
+            <div *ngIf="timer$ | async as time">
+                timer: {{time - 1}}
+            </div>       
         </div>
         <div class="game-score-block">
             <div class="game-score-item">

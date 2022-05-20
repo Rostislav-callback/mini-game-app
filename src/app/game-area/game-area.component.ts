@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { BehaviorSubject,  Observable, takeWhile } from 'rxjs';
+import { BehaviorSubject,  Observable, takeWhile, tap } from 'rxjs';
 
 import { SquaresService } from './services/squares.service';
 
@@ -11,8 +11,11 @@ import { SquaresService } from './services/squares.service';
 export class GameAreaComponent implements OnInit {
   squares!: Array<any>;
   timer$!: Observable<number>;
-  computerScore$!: BehaviorSubject<number>;
-  playerScore$!: BehaviorSubject<number>;
+  computerScore$!: BehaviorSubject<string>;
+  playerScore$!: BehaviorSubject<string>;
+
+  playerScore!: void;
+  computerScore!: void;
 
   constructor(private squareService: SquaresService) { 
     this.computerScore$ = this.squareService.computerScore$;
@@ -20,17 +23,28 @@ export class GameAreaComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.createSquares();
+    this.initValues();
   }
 
-  createSquares() {
+  initValues() {
     this.squares = this.squareService.createSquares();
+    this.playerScore$.next('0');
+    this.computerScore$.next('0');
   }
 
   startGame() {
     this.timer$ = this.squareService.gameTimer().pipe(
-      takeWhile(() => this.computerScore$.getValue() !== 10),
-      takeWhile(() => this.playerScore$.getValue() !== 10)
+      takeWhile(() => {
+        if (this.playerScore$.getValue() == '10' ||
+            this.computerScore$.getValue() == '10'
+        ) {
+          this.squareService.endGame();
+
+          return false;
+        }
+
+        return true;
+      }),
     );
   }
 }

@@ -5,13 +5,14 @@ import { map, repeat, takeWhile, timer, tap, BehaviorSubject, debounceTime } fro
   providedIn: 'root'
 })
 export class SquaresService {
-  count1: number = 0;
-  count2: number = 0;
-  dom!: any;
-  event: any = null;
+  private count1: number = 0;
+  private count2: number = 0;
+  private dom!: any;
+  private event: any = null;
+  private nums: Array<number> = [];
 
-  playerScore$: BehaviorSubject<number> = new BehaviorSubject(0);
-  computerScore$: BehaviorSubject<number> = new BehaviorSubject(0);
+  playerScore$: BehaviorSubject<string> = new BehaviorSubject('0');
+  computerScore$: BehaviorSubject<string> = new BehaviorSubject('0');
   
   constructor() {}
 
@@ -34,7 +35,7 @@ export class SquaresService {
          
         if (time == 2 && this.event == null) {
           this.dom.style.background = 'red'
-          this.computerScore$.next(this.computerCounter())
+          this.computerScore$.next(String(this.computerCounter()))
         }
 
         return 3 - time;
@@ -42,7 +43,6 @@ export class SquaresService {
       tap((time) => {
         if(time == 1) {
           setTimeout(() => {
-            this.dom.style.background = 'aqua';
             this.event = null;
           }, 500)
         }    
@@ -53,9 +53,17 @@ export class SquaresService {
   }
 
   changeSquare(dom: any) {
-    console.log('take')
-    const random = Math.floor(Math.random() * 100);
-    const currentElement = dom[random].children[0].children[0];
+    let noRepeatNum, oldArr;
+    const random = Math.floor(Math.random() * 99) + 1;
+
+    this.nums.push(random);
+
+    oldArr = this.nums.slice(0, -1);
+    oldArr.find(el => el === random)? 
+      noRepeatNum = Math.floor(Math.random() * 99): 
+      noRepeatNum = random;
+    
+    const currentElement = dom[noRepeatNum].children[0].children[0];
 
     this.dom = currentElement;
   }
@@ -64,7 +72,7 @@ export class SquaresService {
     dom.style.background = 'green';
     this.event = event;
 
-    this.playerScore$.next(this.playerCounter());
+    this.playerScore$.next(String(this.playerCounter()));
   }
 
   playerCounter(): number {
@@ -73,5 +81,11 @@ export class SquaresService {
 
   computerCounter(): number {
     return ++this.count2;
+  }
+
+  endGame() {
+    this.nums = [];
+    this.playerScore$.next('0');
+    this.computerScore$.next('0');
   }
 }
