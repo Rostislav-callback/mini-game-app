@@ -1,0 +1,37 @@
+<div *ngIf="isWinner; else defeat">
+  <h1 mat-dialog-title>Winner</h1>
+  <div mat-dialog-content>
+    <div>
+        <div>
+            <p>Computer: {{data.computerScore}}</p>
+        </div>
+        <div>
+            <p>Player: {{data.playerScore}}</p>
+        </div>
+    </div>
+  </div>
+  <div mat-dialog-actions>
+    <button mat-button (click)="closeModal()">Ok</button>
+  </div>
+</div>
+
+<ng-template #defeat>
+    <h1 mat-dialog-title>Defeat</h1>
+    <div mat-dialog-content>
+        <div>
+            <div>
+                <p>Computer: {{data.computerScore}}</p>
+            </div>
+            <div>
+                <p>Player: {{data.playerScore}}</p>
+            </div>
+        </div>
+      </div>
+    <div mat-dialog-actions>
+      <button mat-button>Ok</button>
+    </div>
+</ng-template>
+
+
+
+
