@@ -1,0 +1,24 @@
+<div class="game-area-container">
+    <div class="game-menu-block">
+        <button id="start" class="start-game-button" (click)="startGame()">Start</button>
+        <div class="game-time-block">
+            timer:
+            <span *ngIf="timer$ | async as time">{{time - 1}}</span>       
+        </div>
+        <div class="game-score-block">
+            <div class="game-score-item">
+                <span>Player</span>
+                <div *ngIf="playerScore$ | async as playerScore">{{playerScore}}</div>
+            </div>
+            <div class="game-score-item">
+                <span>Computer</span>
+                <div *ngIf="computerScore$ | async as computerScore">{{computerScore}}</div>
+            </div>       
+        </div>
+    </div>
+    <div class="game-area-block"appSquare>
+        <div *ngFor="let square of squares">
+            <app-square [id]="square"></app-square>
+        </div>
+    </div>
+</div>
