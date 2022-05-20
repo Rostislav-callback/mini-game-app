@@ -16,6 +16,11 @@
     border: none;
 }
 
+.start-game-button:hover {
+    background-color: rgb(224, 224, 224) !important;
+    cursor: pointer !important;
+}
+
 .game-score-block {
     width: 80px;
     display: flex;

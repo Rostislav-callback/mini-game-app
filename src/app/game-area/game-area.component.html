@@ -1,6 +1,9 @@
 <div class="game-area-container">
     <div class="game-menu-block">
-        <button id="start" class="start-game-button" (click)="startGame()">Start</button>
+        <button id="start" 
+                class="start-game-button" 
+                [disabled]="isDisabled" 
+                (click)="startGame()">Start</button>
         <div class="game-time-block">
             <div *ngIf="timer$ | async as time">
                 timer: {{time - 1}}
@@ -17,7 +20,7 @@
             </div>       
         </div>
     </div>
-    <div class="game-area-block"appSquare>
+    <div class="game-area-block" appSquare>
         <div *ngFor="let square of squares">
             <app-square [id]="square"></app-square>
         </div>

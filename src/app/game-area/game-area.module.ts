@@ -1,10 +1,10 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MatGridListModule } from '@angular/material/grid-list';
 
 import { GameAreaComponent } from './game-area.component';
 import { SquareModule } from '../square/square.module';
 import { SquareDirective } from './directives/square.directive';
+import { ModalModule } from '../modal/modal.module';
 
 
 
@@ -16,7 +16,7 @@ import { SquareDirective } from './directives/square.directive';
   imports: [
     CommonModule,
     SquareModule,
-    MatGridListModule
+    ModalModule
   ],
   exports: [
     GameAreaComponent
