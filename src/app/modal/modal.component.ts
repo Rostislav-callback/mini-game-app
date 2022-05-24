@@ -1,5 +1,6 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { GameService } from '../game-area/services/game.service';
 
 import { SquaresService } from '../game-area/services/squares.service';
 
@@ -14,7 +15,7 @@ export class ModalComponent implements OnInit {
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: {playerScore: string, computerScore: string},
     public dialog: MatDialog,
-    private squareService: SquaresService
+    private gameService: GameService
   ) {}
 
   ngOnInit(): void {
@@ -31,6 +32,6 @@ export class ModalComponent implements OnInit {
   }
 
   ngOnDestroy(): void {
-    this.squareService.endGame();
+    this.gameService.endGame();
   }
 }

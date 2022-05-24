@@ -1,19 +1,21 @@
-import { Injectable } from '@angular/core';
-import { map, repeat, takeWhile, timer, tap, BehaviorSubject } from 'rxjs';
+import { Injectable, Renderer2, RendererFactory2 } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SquaresService {
   private dom!: any;
-  private event: any = null;
-  private nums: Array<number> = [];
-  private interval: any;
+  private renderer: Renderer2;
 
   playerScore$: BehaviorSubject<string> = new BehaviorSubject('0');
   computerScore$: BehaviorSubject<string> = new BehaviorSubject('0');
+  event$: BehaviorSubject<any> = new BehaviorSubject(null);
+  nums$: BehaviorSubject<any> = new BehaviorSubject([]);
   
-  constructor() {}
+  constructor(rendererFactory: RendererFactory2) {
+    this.renderer = rendererFactory.createRenderer(null, null);
+  }
 
   createSquares() {
     const squares = [];
@@ -25,41 +27,14 @@ export class SquaresService {
     return squares;
   }
 
-  gameTimer() {
-    return timer(0, 1000).pipe(
-      map((time: number) => {
-        if (time == 0) {
-          this.dom.classList.add('yellow');
-        } 
-         
-        if (time == 2 && this.event == null) {
-          const oldValue = +this.computerScore$.getValue();
-
-          this.dom.classList.remove('yellow');
-          this.dom.classList.add('red');
-          this.computerScore$.next(String(oldValue + 1));
-        }
-
-        return 3 - time;
-      }),
-      tap((time) => {
-        if(time == 1) {
-          setTimeout(() => {
-            this.event = null;
-          }, 500)
-        }    
-      }),
-      takeWhile(Boolean, true),
-      repeat(),
-    )
-  }
-
   changeSquare(dom: any) {
+    const nums = this.nums$.getValue();
     const random = Math.floor(Math.random() * 99) + 1;
-    const repeatValue = this.nums.find(el => el === random);
+    const repeatValue = nums.find((el: number) => el === random);
 
     if(!repeatValue) {
-      this.nums.push(random);
+      nums.push(random)
+      this.nums$.next(nums);
       const currentElement = dom[random].children[0].children[0];
       this.dom = currentElement;
     } else {
@@ -67,34 +42,36 @@ export class SquaresService {
     }
   }
 
+  changeSquareYellow() {
+    this.renderer.addClass(this.dom, 'hit-square');
+  }
+
+  changeSquareDefault() {
+    this.renderer.removeClass(this.dom, 'hit-square');
+  }
+
+  changeSquareRed() {
+    this.renderer.addClass(this.dom, 'missed-square');
+  }
+
   clickSquare(dom: any, event: any) {
     const oldValue = +this.playerScore$.getValue();
-    dom.classList.add('green');
-    this.event = event;
+    this.changeSquareDefault();
+    this.renderer.addClass(this.dom, 'active-square');
+    this.event$.next(event);
     this.playerScore$.next(String(oldValue + 1));
   }
 
-  endGame() {
-    this.nums = [];
-    this.playerScore$.next('0');
-    this.computerScore$.next('0');
-  }
-
-  setInterval(interval: any) {
-    this.interval = interval;
-  }
-
-  endInterval() {
-    clearInterval(this.interval);
-  }
-
   resetGameArea() {
-    const gameArea = document.getElementsByClassName('square');
+    const gameArea = this.dom.closest("div.game-area-block").childNodes;
+    const squaresList = Array.from(gameArea);
 
-    Array.from(gameArea).forEach(element => {
-      element.classList.remove('red');
-      element.classList.remove('green');
-      element.classList.remove('yellow');
+    squaresList.pop();
+    squaresList.forEach((element: any) => {
+      const currentSquare = element.children[0].children[0];
+
+      this.renderer.removeClass(currentSquare, 'missed-square');
+      this.renderer.removeClass(currentSquare, 'active-square');
     });
   }
 }
