@@ -5,14 +5,14 @@
     border-radius: 5px;
 }
 
-.red {
-    background: red;
+.missed-square {
+    background: rgb(255, 95, 95);
 }
 
-.yellow {
+.hit-square {
     background: yellow;
 }
 
-.green {
+.active-square {
     background: #abf768;
 }

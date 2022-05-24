@@ -1,5 +1,8 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { MatInputModule } from '@angular/material/input';
+import { MatListModule } from '@angular/material/list';
+import { MatDividerModule } from '@angular/material/divider';
 
 import { GameAreaComponent } from './game-area.component';
 import { SquareModule } from '../square/square.module';
@@ -16,7 +19,10 @@ import { ModalModule } from '../modal/modal.module';
   imports: [
     CommonModule,
     SquareModule,
-    ModalModule
+    ModalModule,
+    MatInputModule,
+    MatListModule,
+    MatDividerModule
   ],
   exports: [
     GameAreaComponent

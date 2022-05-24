@@ -14,7 +14,7 @@ export class SquareComponent implements OnInit {
   ngOnInit(): void { }
 
   onClick(event: any) {
-    if (event.target.classList.contains('yellow')) {
+    if (event.target.classList.contains('hit-square')) {
       this.squareService.clickSquare(event.target, event);
     }
   }
