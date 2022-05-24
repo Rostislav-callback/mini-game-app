@@ -12,12 +12,13 @@ export class GameService {
   computerScore$!: BehaviorSubject<string>;
   playerScore$!: BehaviorSubject<string>;
   event$!: BehaviorSubject<any>;
+  nums$: BehaviorSubject<any>
 
   constructor(private squareService: SquaresService) {
     this.computerScore$ = this.squareService.computerScore$;
     this.playerScore$ = this.squareService.playerScore$;
     this.event$ = this.squareService.event$;
-    this.nums = this.squareService.nums;
+    this.nums$ = this.squareService.nums$;
   }
 
   gameTimer() {
@@ -49,7 +50,7 @@ export class GameService {
   }
 
   endGame() {
-    this.nums = [];
+    this.nums$.next([]);
     this.playerScore$.next('0');
     this.computerScore$.next('0');
   }

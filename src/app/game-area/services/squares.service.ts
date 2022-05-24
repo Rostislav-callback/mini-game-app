@@ -8,12 +8,10 @@ export class SquaresService {
   private dom!: any;
   private renderer: Renderer2;
 
-  event: any = null;
-  nums: Array<number> = [];
-
   playerScore$: BehaviorSubject<string> = new BehaviorSubject('0');
   computerScore$: BehaviorSubject<string> = new BehaviorSubject('0');
   event$: BehaviorSubject<any> = new BehaviorSubject(null);
+  nums$: BehaviorSubject<any> = new BehaviorSubject([]);
   
   constructor(rendererFactory: RendererFactory2) {
     this.renderer = rendererFactory.createRenderer(null, null);
@@ -30,11 +28,13 @@ export class SquaresService {
   }
 
   changeSquare(dom: any) {
+    const nums = this.nums$.getValue();
     const random = Math.floor(Math.random() * 99) + 1;
-    const repeatValue = this.nums.find(el => el === random);
+    const repeatValue = nums.find((el: number) => el === random);
 
     if(!repeatValue) {
-      this.nums.push(random);
+      nums.push(random)
+      this.nums$.next(nums);
       const currentElement = dom[random].children[0].children[0];
       this.dom = currentElement;
     } else {

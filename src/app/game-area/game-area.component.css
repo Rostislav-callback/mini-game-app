@@ -22,7 +22,7 @@
 }
 
 .game-score-block {
-    width: 80px;
+    width: 220px;
     display: flex;
     flex-direction: column;
     justify-content: left;
@@ -33,9 +33,8 @@
     width: 70px;
 }
 
-.game-score-item {
+.game-score-items {
     display: flex;
-    justify-content: space-between;
 }
 
 .game-area-block {
@@ -51,6 +50,17 @@
 
 .game-area-block :hover {
     cursor: pointer;
+}
+
+.mat-list {
+    padding-top: 0;
+    max-height: 40px;
+}
+
+::ng-deep .mat-list-item-content {
+    max-height: 40px;
+    width: 120px !important;
+    justify-content: right !important;
 }
 
 ::ng-deep .mat-form-field-infix {
