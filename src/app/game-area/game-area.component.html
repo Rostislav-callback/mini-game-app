@@ -5,9 +5,10 @@
                 [disabled]="isDisabled" 
                 (click)="startGame()">Start</button>
         <div class="game-time-block">
-            <div *ngIf="timer$ | async as time">
-                timer: {{time - 1}}
-            </div>       
+            <mat-form-field class="game-time" appearance="fill" *ngIf="timer$ | async as time">
+                <mat-label>Timer:</mat-label>
+                <input matInput placeholder="Ex. Pizza" [value]="time" readonly>
+            </mat-form-field>       
         </div>
         <div class="game-score-block">
             <div class="game-score-item">

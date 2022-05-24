@@ -29,7 +29,7 @@
 }
 
 .game-time-block {
-    padding: 10px;
+    max-height: 40px;
     width: 70px;
 }
 
@@ -51,4 +51,9 @@
 
 .game-area-block :hover {
     cursor: pointer;
+}
+
+::ng-deep .mat-form-field-infix {
+    width: 50px !important;
+    padding: 2px !important;
 }

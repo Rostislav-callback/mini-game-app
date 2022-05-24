@@ -1,5 +1,6 @@
 import { Directive, ElementRef, HostListener } from '@angular/core';
 import { Observable } from 'rxjs';
+import { GameService } from '../services/game.service';
 import { SquaresService } from '../services/squares.service';
 
 @Directive({
@@ -10,6 +11,7 @@ export class SquareDirective {
   timer$!: Observable<number>;
 
   constructor(private elementRef: ElementRef,
+    private gameService: GameService,
     private squareService: SquaresService) {}
 
   @HostListener('document:click', ['$event']) onClick(event: Event) {
@@ -17,7 +19,7 @@ export class SquareDirective {
       const interval = setInterval(() => this.squareService.changeSquare(this.elementList), 3000);
 
       this.squareService.changeSquare(this.elementList);
-      this.squareService.setInterval(interval);
+      this.gameService.setInterval(interval);
     }
   }
 }

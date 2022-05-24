@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { BehaviorSubject, Observable, takeWhile } from 'rxjs';
+import { BehaviorSubject, map, Observable, takeWhile } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 
 import { SquaresService } from './services/squares.service';
 import { ModalComponent } from '../modal/modal.component';
+import { GameService } from './services/game.service';
 
 @Component({
   selector: 'app-game-area',
@@ -11,7 +12,8 @@ import { ModalComponent } from '../modal/modal.component';
   styleUrls: ['./game-area.component.css']
 })
 export class GameAreaComponent implements OnInit {
-  squares!: Array<any>;
+  squares: Array<number> = [];
+  
   timer$!: Observable<number>;
   computerScore$!: BehaviorSubject<string>;
   playerScore$!: BehaviorSubject<string>;
@@ -22,6 +24,7 @@ export class GameAreaComponent implements OnInit {
 
   constructor(
     private squareService: SquaresService,
+    private gameService: GameService,
     public dialog: MatDialog
   ) { 
     this.computerScore$ = this.squareService.computerScore$;
@@ -40,7 +43,7 @@ export class GameAreaComponent implements OnInit {
 
   startGame() {
     this.isDisabled = true;
-    this.timer$ = this.squareService.gameTimer().pipe(
+    this.timer$ = this.gameService.gameTimer().pipe(
       takeWhile(() => {
         if (this.playerScore$.getValue() == '10' || this.computerScore$.getValue() == '10') {
           this.stopGame();
@@ -54,7 +57,7 @@ export class GameAreaComponent implements OnInit {
   }
 
   private stopGame() {
-    this.squareService.endInterval();
+    this.gameService.endInterval();
     this.squareService.resetGameArea();
     this.dialog.open(ModalComponent, {
       width: '500px', 
